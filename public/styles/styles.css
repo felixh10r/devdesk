@@ -20,7 +20,7 @@ iframe {
 }
 
 input[type="date"] {
-  width: 14ch;
+  width: 13ch;
 }
 
 input[type="month"] {
@@ -78,7 +78,7 @@ section + section {
 
 .invoice-grid {
   display: grid;
-  grid-template-columns: minmax(auto, 300px) 140px 140px 100px 40px 50px 65px;
+  grid-template-columns: minmax(auto, 300px) 130px 130px 90px 40px 60px 75px;
   margin-block: 8px;
 }
 
@@ -112,6 +112,15 @@ section + section {
 
 .invoice-grid__cell > button + button {
   margin-inline-start: 4px;
+}
+
+.invoice-grid__cell > button {
+  width: 32px;
+  height: 32px;
+  padding-inline: 0;
+  border-radius: 4px;
+  background-color: transparent;
+  border: 1px solid darkgray;
 }
 
 .invoice-grid__cell.is-even {
