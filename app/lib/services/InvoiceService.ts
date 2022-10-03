@@ -147,7 +147,7 @@ const invoiceService = {
       basePath,
       process.env.INVOICE_INCOMING_CASH_FOLDER!,
     );
-
+    
     return [
       ...getInvoicesForFolder(outgoing),
       ...getInvoicesForFolder(incoming),

@@ -6,8 +6,6 @@ interface Props {
   invoicesForMonth: Invoice[];
 }
 
-const SUBMIT_ID = "button-submit";
-
 export default function FilterBar({ invoicesForMonth }: Props) {
   const [searchParams] = useSearchParams();
 
@@ -25,9 +23,8 @@ export default function FilterBar({ invoicesForMonth }: Props) {
         type="month"
         name="month"
         defaultValue={searchParams.get("month")!}
-        onChange={() => document.getElementById(SUBMIT_ID)!.click()}
       />
-      <button id={SUBMIT_ID} type="submit" title="Aktualisieren">
+      <button type="submit" title="Aktualisieren">
         ↩️
       </button>
       <button

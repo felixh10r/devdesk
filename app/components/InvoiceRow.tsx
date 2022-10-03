@@ -6,9 +6,10 @@ import { invoiceToString } from "~/lib/services/InvoiceService";
 interface Props {
   inv: Invoice;
   target: string;
+  isEven: boolean;
 }
 
-export default function InvoiceRow({ inv, target }: Props) {
+export default function InvoiceRow({ inv, target, isEven }: Props) {
   const form = `form-${inv.path}`;
   const [isDirty, setIsDirty] = useState(false);
 
@@ -18,9 +19,11 @@ export default function InvoiceRow({ inv, target }: Props) {
     navigator.clipboard.writeText(invoiceToString(inv));
   };
 
+  const cellClassName = `invoice-grid__cell${isEven ? " is-even" : ""}`;
+
   return (
-    <tr>
-      <td>
+    <>
+      <div className={`${cellClassName} invoice-title-cell`}>
         <a href={`/static${inv.path}`} {...{ target }}>
           {inv.name}
         </a>
@@ -28,8 +31,8 @@ export default function InvoiceRow({ inv, target }: Props) {
           <input type="hidden" name="name" defaultValue={inv.name} />
           <input type="hidden" name="path" defaultValue={inv.path} />
         </Form>
-      </td>
-      <td>
+      </div>
+      <div className={cellClassName}>
         <input
           {...{ form }}
           type="date"
@@ -37,8 +40,8 @@ export default function InvoiceRow({ inv, target }: Props) {
           defaultValue={inv.paymentDate}
           onChange={setDirty}
         />
-      </td>
-      <td>
+      </div>
+      <div className={cellClassName}>
         <input
           {...{ form }}
           type="date"
@@ -46,8 +49,8 @@ export default function InvoiceRow({ inv, target }: Props) {
           defaultValue={inv.invoiceDate}
           onChange={setDirty}
         />
-      </td>
-      <td>
+      </div>
+      <div className={`${cellClassName} cell--align-end`}>
         <input
           {...{ form }}
           className={`number-field ${
@@ -58,8 +61,8 @@ export default function InvoiceRow({ inv, target }: Props) {
           defaultValue={inv.amount}
           onChange={setDirty}
         />
-      </td>
-      <td>
+      </div>
+      <div className={`${cellClassName} cell--align-end`}>
         <input
           {...{ form }}
           className="number-field vat-field"
@@ -68,8 +71,8 @@ export default function InvoiceRow({ inv, target }: Props) {
           defaultValue={inv.vat}
           onChange={setDirty}
         />
-      </td>
-      <td>
+      </div>
+      <div className={cellClassName}>
         <select
           {...{ form }}
           name="bankOrCash"
@@ -79,8 +82,8 @@ export default function InvoiceRow({ inv, target }: Props) {
           <option value="bank">🏦</option>
           <option value="cash">👛</option>
         </select>
-      </td>
-      <td>
+      </div>
+      <div className={cellClassName}>
         <button
           {...{ form }}
           type="submit"
@@ -98,7 +101,7 @@ export default function InvoiceRow({ inv, target }: Props) {
         >
           📋
         </button>
-      </td>
-    </tr>
+      </div>
+    </>
   );
 }

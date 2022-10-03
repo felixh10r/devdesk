@@ -20,7 +20,7 @@ iframe {
 }
 
 input[type="date"] {
-  width: 12ch;
+  width: 14ch;
 }
 
 input[type="month"] {
@@ -40,17 +40,8 @@ table button {
   margin-inline-start: 0.5rem;
 }
 
-tbody tr:nth-child(even) {
-  background-color: #e0e8eb;
-}
-
-td:first-child {
-  width: 13rem;
-  white-space: nowrap;
-}
-
-th {
-  text-align: left;
+section + section {
+  margin-block-start: 56px;
 }
 
 .container {
@@ -83,4 +74,52 @@ th {
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 100vh;
+}
+
+.invoice-grid {
+  display: grid;
+  grid-template-columns: minmax(auto, 300px) 140px 140px 100px 40px 50px 65px;
+  margin-block: 8px;
+}
+
+.invoice-grid__header,
+.invoice-grid__body {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1/-1;
+}
+
+.invoice-grid__header {
+  font-weight: 700;
+  padding-block-end: 4px;
+}
+
+.invoice-title-cell {
+  display: flex;
+  align-items: center;
+}
+
+.invoice-title-cell > a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.invoice-grid__cell {
+  padding-block: 8px;
+  padding-inline: 2px;
+}
+
+.invoice-grid__cell > button + button {
+  margin-inline-start: 4px;
+}
+
+.invoice-grid__cell.is-even {
+  background-color: #e0e8eb;
+}
+
+.header--align-end,
+.cell--align-end {
+  display: flex;
+  justify-content: flex-end;
 }

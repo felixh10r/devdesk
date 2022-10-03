@@ -1,6 +1,6 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
 import FilterBar from "~/components/FilterBar";
 import InvoiceRow from "~/components/InvoiceRow";
 import type { Invoice } from "~/lib/services/InvoiceService";
@@ -53,6 +53,11 @@ export default function Invoices() {
   const { unassignedInvoices, invoicesForMonth, outstandingAmount } =
     useLoaderData<LoaderData>();
 
+  const [searchParams] = useSearchParams();
+  const monthName = new Intl.DateTimeFormat("de-DE", { month: "long" }).format(
+    new Date(searchParams.get("month")!),
+  );
+
   return (
     <div className="two-panes">
       <div>
@@ -62,15 +67,55 @@ export default function Invoices() {
           {!!outstandingAmount && (
             <p>
               Offene Forderungen:{" "}
-              {new Intl.NumberFormat("de-DE", {
-                style: "currency",
-                currency: "EUR",
-              }).format(outstandingAmount)}
+              <span className="positive">
+                {new Intl.NumberFormat("de-DE", {
+                  style: "currency",
+                  currency: "EUR",
+                }).format(outstandingAmount)}
+              </span>
             </p>
           )}
         </div>
 
-        <table>
+        <div className="container">
+          <section>
+            <h2>Offene Rechnungen</h2>
+            <div className="invoice-grid">
+              <div className="invoice-grid__header">
+                <span></span>
+                <span>Zahlung</span>
+                <span>Rechnung</span>
+                <span className="header--align-end">Brutto</span>
+                <span className="header--align-end">%</span>
+              </div>
+              <div className="invoice-grid__body">
+                {unassignedInvoices.map((inv, idx) => (
+                  <InvoiceRow key={inv.path} {...{ inv }} target={IFRAME_NAME} isEven={!(idx % 2)} />
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Abgelegte Rechnungen – {monthName}</h2>
+            <div className="invoice-grid">
+              <div className="invoice-grid__header">
+                <span></span>
+                <span>Zahlung</span>
+                <span>Rechnung</span>
+                <span className="header--align-end">Brutto</span>
+                <span className="header--align-end">%</span>
+              </div>
+              <div className="invoice-grid__body">
+                {invoicesForMonth.map((inv, idx) => (
+                  <InvoiceRow key={inv.path} {...{ inv }} target={IFRAME_NAME} isEven={!(idx % 2)} />
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* <table>
           <thead>
             <tr>
               <th></th>
@@ -86,7 +131,7 @@ export default function Invoices() {
           </tbody>
           <tbody>
             <tr>
-              <td>&nbsp;</td>
+              <td colSpan={7} className="table-divider">&nbsp;</td>
             </tr>
           </tbody>
           <tbody>
@@ -94,7 +139,7 @@ export default function Invoices() {
               <InvoiceRow key={inv.path} {...{ inv }} target={IFRAME_NAME} />
             ))}
           </tbody>
-        </table>
+        </table> */}
       </div>
 
       <iframe name={IFRAME_NAME} title="Vorschau"></iframe>
