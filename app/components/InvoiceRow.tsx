@@ -1,5 +1,6 @@
 import { Form } from "@remix-run/react";
 import { useState } from "react";
+import useHasJSEnabled from "~/lib/hooks/useHasJSEnabled";
 import type { Invoice } from "~/lib/services/InvoiceService";
 import { invoiceToString } from "~/lib/services/InvoiceService";
 
@@ -12,6 +13,7 @@ interface Props {
 export default function InvoiceRow({ inv, target, isEven }: Props) {
   const form = `form-${inv.path}`;
   const [isDirty, setIsDirty] = useState(false);
+  const hasJsEnabled = useHasJSEnabled();
 
   const setDirty = () => setIsDirty(true);
 
@@ -88,19 +90,21 @@ export default function InvoiceRow({ inv, target, isEven }: Props) {
           {...{ form }}
           type="submit"
           title="Speichern"
-          disabled={!isDirty}
+          disabled={hasJsEnabled && !isDirty}
         >
           💾
         </button>
-        <button
-          {...{ form }}
-          type="button"
-          title="In Zwischenablage kopieren"
-          onClick={onCopyToClipboard}
-          disabled={!inv.amount || !inv.paymentDate || isDirty}
-        >
-          📋
-        </button>
+        {hasJsEnabled && (
+          <button
+            {...{ form }}
+            type="button"
+            title="In Zwischenablage kopieren"
+            onClick={onCopyToClipboard}
+            disabled={!inv.amount || !inv.paymentDate || isDirty}
+          >
+            📋
+          </button>
+        )}
       </div>
     </>
   );

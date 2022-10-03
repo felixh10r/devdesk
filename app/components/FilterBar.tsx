@@ -1,4 +1,5 @@
 import { Form, useSearchParams } from "@remix-run/react";
+import useHasJSEnabled from '~/lib/hooks/useHasJSEnabled'
 import type { Invoice } from "~/lib/services/InvoiceService";
 import { invoiceToString } from "~/lib/services/InvoiceService";
 
@@ -8,6 +9,7 @@ interface Props {
 
 export default function FilterBar({ invoicesForMonth }: Props) {
   const [searchParams] = useSearchParams();
+  const hasJsEnabled = useHasJSEnabled();
 
   const onCopyToClipboard = () => {
     const strings = invoicesForMonth
@@ -27,13 +29,15 @@ export default function FilterBar({ invoicesForMonth }: Props) {
       <button type="submit" title="Aktualisieren">
         ↩️
       </button>
-      <button
-        type="button"
-        title="In Zwischenablage kopieren"
-        onClick={onCopyToClipboard}
-      >
-        📋
-      </button>
+      {hasJsEnabled && (
+        <button
+          type="button"
+          title="In Zwischenablage kopieren"
+          onClick={onCopyToClipboard}
+        >
+          📋
+        </button>
+      )}
     </Form>
   );
 }
