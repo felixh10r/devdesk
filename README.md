@@ -47,3 +47,10 @@ touch ~/Library/LaunchAgents/at.scale.devdesk.plist
 </dict>
 </plist>
 ```
+
+```sh
+launchctl load ~/Library/LaunchAgents/at.scale.devdesk.plist
+launchctl start at.scale.devdesk
+```
+
+Recommended: Add a bookmark to http://localhost:1337
