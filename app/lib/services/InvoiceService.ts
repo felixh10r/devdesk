@@ -55,7 +55,7 @@ function contractDate(date: string) {
 function pathToInvoiceData(path: string) {
   const baseName = path.split("/").pop()!.split(".")[0];
   const matches = baseName.match(
-    /(?<firstDate>\d\d-\d\d-\d\d)? ?(?<secondDate>\d\d-\d\d-\d\d)? ? (?<fileName>.+)/,
+    /(?<firstDate>\d\d-\d\d-\d\d)? ?(?<secondDate>\d\d-\d\d-\d\d)? ?(?<fileName>.+)/u,
   );
 
   if (!matches?.groups) {
