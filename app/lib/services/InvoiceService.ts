@@ -48,6 +48,14 @@ function expandDate(date: string) {
   return date ? `20${date}` : "";
 }
 
+function amountToNumber(amount: string) {
+  return parseFloat(amount.replace(",", "."));
+}
+
+function numberToAmount(amountNumber: number) {
+  return amountNumber.toFixed(2).replace(".", ",");
+}
+
 function contractDate(date: string) {
   return date.replace(/20(\d\d)/, "$1");
 }
@@ -168,9 +176,7 @@ const invoiceService = {
       filename = `${contractDate(inv.paymentDate)} ${filename}`;
     }
 
-    const amountNumber = inv.amount
-      ? parseFloat(inv.amount.replace(",", "."))
-      : null;
+    const amountNumber = inv.amount ? amountToNumber(inv.amount) : null;
 
     if (amountNumber || inv.vat) {
       const amount = (() => {
@@ -178,7 +184,7 @@ const invoiceService = {
           return "";
         }
 
-        return amountNumber.toFixed(2).replace(".", ",");
+        return numberToAmount(amountNumber);
       })();
 
       const meta = [amount, inv.vat].filter(Boolean).join("|");
@@ -220,6 +226,13 @@ const invoiceService = {
     }
 
     return false;
+  },
+  getOutstandingAmount(invoices: Invoice[]) {
+    return invoices.reduce((acc, ui) => {
+      const amountNumber = amountToNumber(ui.amount);
+
+      return acc + (amountNumber > 0 ? amountNumber : 0);
+    }, 0);
   },
 };
 

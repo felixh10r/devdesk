@@ -1,17 +1,17 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useLoaderData, useSearchParams } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
+import FilterBar from "~/components/FilterBar";
 import InvoiceRow from "~/components/InvoiceRow";
 import type { Invoice } from "~/lib/services/InvoiceService";
-import { invoiceToString } from "~/lib/services/InvoiceService";
 import invoiceService from "../lib/services/InvoiceService";
 
 interface LoaderData {
   unassignedInvoices: Invoice[];
   invoicesForMonth: Invoice[];
+  outstandingAmount: number;
 }
 
-const SUBMIT_ID = "button-submit";
 const IFRAME_NAME = "iframe-preview";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -27,9 +27,15 @@ export const loader: LoaderFunction = async ({ request }) => {
     return redirect(`${url.pathname}?month=${currentMonth}`);
   }
 
+  const unassignedInvoices = invoiceService.getUnassignedInvoices();
+
+  const outstandingAmount =
+    invoiceService.getOutstandingAmount(unassignedInvoices);
+
   const data: LoaderData = {
-    unassignedInvoices: invoiceService.getUnassignedInvoices(),
     invoicesForMonth: invoiceService.getInvoicesForMonth(month),
+    unassignedInvoices,
+    outstandingAmount,
   };
 
   return json(data);
@@ -44,40 +50,24 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Invoices() {
-  const [searchParams] = useSearchParams();
-  const { unassignedInvoices, invoicesForMonth } = useLoaderData<LoaderData>();
-
-  const onCopyToClipboard = () => {
-    const strings = invoicesForMonth
-      .filter((i) => i.amount && i.paymentDate)
-      .map(invoiceToString);
-
-    navigator.clipboard.writeText(strings.join("\n"));
-  };
+  const { unassignedInvoices, invoicesForMonth, outstandingAmount } =
+    useLoaderData<LoaderData>();
 
   return (
     <div className="two-panes">
       <div>
         <div className="container">
           <h1>devDesk</h1>
-          <Form method="get" className="filter-bar">
-            <input
-              type="month"
-              name="month"
-              defaultValue={searchParams.get("month")!}
-              onChange={() => document.getElementById(SUBMIT_ID)!.click()}
-            />
-            <button id={SUBMIT_ID} type="submit" title="Aktualisieren">
-              ↩️
-            </button>
-            <button
-              type="button"
-              title="In Zwischenablage kopieren"
-              onClick={onCopyToClipboard}
-            >
-              📋
-            </button>
-          </Form>
+          <FilterBar {...{ invoicesForMonth }} />
+          {!!outstandingAmount && (
+            <p>
+              Offene Forderungen:{" "}
+              {new Intl.NumberFormat("de-DE", {
+                style: "currency",
+                currency: "EUR",
+              }).format(outstandingAmount)}
+            </p>
+          )}
         </div>
 
         <table>
