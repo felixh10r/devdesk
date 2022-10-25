@@ -114,32 +114,6 @@ export default function Invoices() {
             </div>
           </section>
         </div>
-
-        {/* <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Zahlung</th>
-              <th>Rechnung</th>
-              <th>Brutto</th>
-            </tr>
-          </thead>
-          <tbody>
-            {unassignedInvoices.map((inv) => (
-              <InvoiceRow key={inv.path} {...{ inv }} target={IFRAME_NAME} />
-            ))}
-          </tbody>
-          <tbody>
-            <tr>
-              <td colSpan={7} className="table-divider">&nbsp;</td>
-            </tr>
-          </tbody>
-          <tbody>
-            {invoicesForMonth.map((inv) => (
-              <InvoiceRow key={inv.path} {...{ inv }} target={IFRAME_NAME} />
-            ))}
-          </tbody>
-        </table> */}
       </div>
 
       <iframe name={IFRAME_NAME} title="Vorschau"></iframe>

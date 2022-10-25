@@ -1,5 +1,5 @@
 import { Form } from "@remix-run/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import useHasJSEnabled from "~/lib/hooks/useHasJSEnabled";
 import type { Invoice } from "~/lib/services/InvoiceService";
 import { invoiceToString } from "~/lib/services/InvoiceService";
@@ -14,25 +14,37 @@ export default function InvoiceRow({ inv, target, isEven }: Props) {
   const form = `form-${inv.path}`;
   const [isDirty, setIsDirty] = useState(false);
   const hasJsEnabled = useHasJSEnabled();
+  const viewButton = useRef<HTMLAnchorElement | null>(null);
 
   const setDirty = () => setIsDirty(true);
 
-  const onCopyToClipboard = () => {
+  const onCopyToClipboard = () =>
     navigator.clipboard.writeText(invoiceToString(inv));
-  };
+
+  const onFocus = () => viewButton.current?.click();
 
   const cellClassName = `invoice-grid__cell${isEven ? " is-even" : ""}`;
 
   return (
     <>
-      <div className={`${cellClassName} invoice-title-cell`}>
-        <a href={`/static${inv.path}`} {...{ target }}>
-          {inv.name}
-        </a>
+      <div className={cellClassName}>
+        <input
+          {...{ form, onFocus }}
+          name="name"
+          minLength={2}
+          defaultValue={inv.name}
+          onChange={setDirty}
+        />
         <Form id={form} method="post" onSubmit={() => setIsDirty(false)}>
-          <input type="hidden" name="name" defaultValue={inv.name} />
           <input type="hidden" name="path" defaultValue={inv.path} />
         </Form>
+        {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+        <a
+          ref={viewButton}
+          className="invoice-view-link"
+          href={`/static${inv.path}`}
+          {...{ target }}
+        />
       </div>
       <div className={cellClassName}>
         <input

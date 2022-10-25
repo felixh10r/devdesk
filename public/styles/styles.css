@@ -13,7 +13,6 @@ body {
 
 iframe {
   width: 100%;
-  height: 100%;
   border: 0;
   border-inline-start: 1px solid grey;
   background-color: #525659;
@@ -73,7 +72,11 @@ section + section {
 .two-panes {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+.two-panes > * {
   height: 100vh;
+  overflow-y: auto;
 }
 
 .invoice-grid {
@@ -94,29 +97,23 @@ section + section {
   padding-block-end: 4px;
 }
 
-.invoice-title-cell {
-  display: flex;
-  align-items: center;
-}
-
-.invoice-title-cell > a {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .invoice-grid__cell {
   padding-block: 8px;
   padding-inline: 2px;
+  display: flex;
+  align-items: center;
 }
 
 .invoice-grid__cell > button + button {
   margin-inline-start: 4px;
 }
 
+.invoice-grid__cell > * {
+  height: 34px;
+}
+
 .invoice-grid__cell > button {
   width: 32px;
-  height: 32px;
   padding-inline: 0;
   border-radius: 4px;
   background-color: transparent;
@@ -131,4 +128,8 @@ section + section {
 .cell--align-end {
   display: flex;
   justify-content: flex-end;
+}
+
+.invoice-view-link {
+  display: none;
 }
