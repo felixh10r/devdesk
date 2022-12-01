@@ -11,6 +11,10 @@ export interface Invoice {
   bankOrCash: "bank" | "cash";
 }
 
+const META_SPLIT_CHAR = "_";
+const META_OPENING_SEQ = "((";
+const META_CLOSING_SEQ = "))";
+
 const DEFAULT_VAT = "20";
 export const REVERSE_CHARGE_TOKEN = "R";
 
@@ -93,11 +97,12 @@ function pathToInvoiceData(path: string) {
     inv.invoiceDate = expandDate(secondDate);
   }
 
-  const metaMatch = fileName.match(/\[(?<meta>.+)]/);
+  // use characters from META_OPENING_SEQ and META_CLOSING_SEQ
+  const metaMatch = fileName.match(/\(\((?<meta>.+)\)\)/);
 
   if (metaMatch?.groups) {
-    const [amount, vat] = metaMatch.groups.meta.split("|");
-    inv.name = fileName.split(" [")[0];
+    const [amount, vat] = metaMatch.groups.meta.split(META_SPLIT_CHAR);
+    inv.name = fileName.split(` ${META_OPENING_SEQ}`)[0];
     inv.amount = amount;
     inv.vat = vat;
   } else {
@@ -147,7 +152,7 @@ const invoiceService = {
       basePath,
       process.env.INVOICE_INCOMING_CASH_FOLDER!,
     );
-    
+
     return [
       ...getInvoicesForFolder(outgoing),
       ...getInvoicesForFolder(incoming),
@@ -187,10 +192,10 @@ const invoiceService = {
         return numberToAmount(amountNumber);
       })();
 
-      const meta = [amount, inv.vat].filter(Boolean).join("|");
-      const metaBrackets = meta ? `[${meta}]` : "";
+      const meta = [amount, inv.vat].filter(Boolean).join(META_SPLIT_CHAR);
+      const metaStr = meta ? `${META_OPENING_SEQ}${meta}${META_CLOSING_SEQ}` : "";
 
-      filename = [filename, metaBrackets].join(" ");
+      filename = [filename, metaStr].join(" ");
     }
 
     filename = `${filename}.${ext}`;

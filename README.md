@@ -53,4 +53,12 @@ launchctl load ~/Library/LaunchAgents/at.scale.devdesk.plist
 launchctl start at.scale.devdesk
 ```
 
+## Reloading the launch agent
+
+```sh
+launchctl unload ~/Library/LaunchAgents/at.scale.devdesk.plist
+launchctl load ~/Library/LaunchAgents/at.scale.devdesk.plist
+launchctl start at.scale.devdesk
+```
+
 Recommended: Add a bookmark to http://localhost:1337
