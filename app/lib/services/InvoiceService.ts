@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import childProcess from "child_process";
 
 export interface Invoice {
   name: string;
@@ -193,7 +194,9 @@ const invoiceService = {
       })();
 
       const meta = [amount, inv.vat].filter(Boolean).join(META_SPLIT_CHAR);
-      const metaStr = meta ? `${META_OPENING_SEQ}${meta}${META_CLOSING_SEQ}` : "";
+      const metaStr = meta
+        ? `${META_OPENING_SEQ}${meta}${META_CLOSING_SEQ}`
+        : "";
 
       filename = [filename, metaStr].join(" ");
     }
@@ -238,6 +241,9 @@ const invoiceService = {
 
       return acc + (amountNumber > 0 ? amountNumber : 0);
     }, 0);
+  },
+  openFolderForMonth(dateWithFullYear: string) {
+    childProcess.exec(`open ${resolveInvoiceBasePath(dateWithFullYear)}`);
   },
 };
 

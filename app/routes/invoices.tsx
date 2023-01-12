@@ -17,6 +17,7 @@ const IFRAME_NAME = "iframe-preview";
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const month = url.searchParams.get("month");
+  const action = url.searchParams.get("action");
 
   if (!month) {
     const currentMonth = new Date()
@@ -25,6 +26,10 @@ export const loader: LoaderFunction = async ({ request }) => {
       .slice(0, 2)
       .join("-");
     return redirect(`${url.pathname}?month=${currentMonth}`);
+  }
+
+  if (action === "open") {
+    invoiceService.openFolderForMonth(month);
   }
 
   const unassignedInvoices = invoiceService.getUnassignedInvoices();
@@ -90,7 +95,12 @@ export default function Invoices() {
               </div>
               <div className="invoice-grid__body">
                 {unassignedInvoices.map((inv, idx) => (
-                  <InvoiceRow key={inv.path} {...{ inv }} target={IFRAME_NAME} isEven={!(idx % 2)} />
+                  <InvoiceRow
+                    key={inv.path}
+                    {...{ inv }}
+                    target={IFRAME_NAME}
+                    isEven={!(idx % 2)}
+                  />
                 ))}
               </div>
             </div>
@@ -108,7 +118,12 @@ export default function Invoices() {
               </div>
               <div className="invoice-grid__body">
                 {invoicesForMonth.map((inv, idx) => (
-                  <InvoiceRow key={inv.path} {...{ inv }} target={IFRAME_NAME} isEven={!(idx % 2)} />
+                  <InvoiceRow
+                    key={inv.path}
+                    {...{ inv }}
+                    target={IFRAME_NAME}
+                    isEven={!(idx % 2)}
+                  />
                 ))}
               </div>
             </div>

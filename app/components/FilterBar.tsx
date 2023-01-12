@@ -1,5 +1,5 @@
 import { Form, useSearchParams } from "@remix-run/react";
-import useHasJSEnabled from '~/lib/hooks/useHasJSEnabled'
+import useHasJSEnabled from "~/lib/hooks/useHasJSEnabled";
 import type { Invoice } from "~/lib/services/InvoiceService";
 import { invoiceToString } from "~/lib/services/InvoiceService";
 
@@ -26,8 +26,11 @@ export default function FilterBar({ invoicesForMonth }: Props) {
         name="month"
         defaultValue={searchParams.get("month")!}
       />
-      <button type="submit" title="Aktualisieren">
+      <button type="submit" name="action" value="refresh" title="Aktualisieren">
         ↩️
+      </button>
+      <button type="submit" name="action" value="open" title="Ordner öffnen">
+        📂
       </button>
       {hasJsEnabled && (
         <button
