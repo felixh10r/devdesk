@@ -5,6 +5,21 @@ import { RemixServer } from "@remix-run/react";
 import { renderToPipeableStream } from "react-dom/server";
 const ABORT_DELAY = 5000;
 
+declare global {
+  namespace NodeJS {
+    export interface ProcessEnv {
+      DEFAULT_INVOICE_PATH: string;
+      INVOICE_INCOMING_BANK_FOLDER: string;
+      INVOICE_INCOMING_CASH_FOLDER: string;
+      INVOICE_OUTGOING_FOLDER: string;
+      INVOICE_PATH_BASE: string;
+      MAIL_SENDER_NAME: string;
+      MAIL_TO: string;
+      PORT: string;
+    }
+  }
+}
+
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,

@@ -10,9 +10,14 @@ interface LoaderData {
   unassignedInvoices: Invoice[];
   invoicesForMonth: Invoice[];
   outstandingAmount: number;
+  mailSenderName: string;
+  mailTo: string;
 }
 
 const IFRAME_NAME = "iframe-preview";
+
+// below this date, the default month will be last month
+const BOOKKEEPING_THRESHOLD_DATE = 7;
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
@@ -20,12 +25,20 @@ export const loader: LoaderFunction = async ({ request }) => {
   const action = url.searchParams.get("action");
 
   if (!month) {
-    const currentMonth = new Date()
+    const currentMonth = new Date();
+
+    if (currentMonth.getDate() < BOOKKEEPING_THRESHOLD_DATE) {
+      // this seems to work for year rollover
+      currentMonth.setMonth(currentMonth.getMonth() - 1);
+    }
+
+    const monthStr = currentMonth
       .toISOString()
       .split("-")
       .slice(0, 2)
       .join("-");
-    return redirect(`${url.pathname}?month=${currentMonth}`);
+
+    return redirect(`${url.pathname}?month=${monthStr}`);
   }
 
   if (action === "open") {
@@ -41,6 +54,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     invoicesForMonth: invoiceService.getInvoicesForMonth(month),
     unassignedInvoices,
     outstandingAmount,
+    mailSenderName: process.env.MAIL_SENDER_NAME,
+    mailTo: process.env.MAIL_TO,
   };
 
   return json(data);
@@ -55,8 +70,13 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Invoices() {
-  const { unassignedInvoices, invoicesForMonth, outstandingAmount } =
-    useLoaderData<LoaderData>();
+  const {
+    unassignedInvoices,
+    invoicesForMonth,
+    outstandingAmount,
+    mailSenderName,
+    mailTo,
+  } = useLoaderData<LoaderData>();
 
   const [searchParams] = useSearchParams();
   const monthName = new Intl.DateTimeFormat("de-DE", { month: "long" }).format(
@@ -68,7 +88,7 @@ export default function Invoices() {
       <div>
         <div className="container">
           <h1>devDesk</h1>
-          <FilterBar {...{ invoicesForMonth }} />
+          <FilterBar {...{ invoicesForMonth, mailSenderName, mailTo }} />
           {!!outstandingAmount && (
             <p>
               Offene Forderungen:{" "}

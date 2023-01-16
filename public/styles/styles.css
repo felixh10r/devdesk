@@ -52,6 +52,11 @@ section + section {
   gap: 0.5rem;
 }
 
+.filter-bar a {
+  text-decoration: none;
+  align-self: center;
+}
+
 .negative {
   color: #231f20;
 }

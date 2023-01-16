@@ -40,7 +40,7 @@ function resolveInvoiceBasePath(dateWithFullYear: string) {
   const [year, month] = dateWithFullYear.split("-");
 
   return process.env
-    .INVOICE_PATH_BASE!.replace(/\{yyyy}/g, year)
+    .INVOICE_PATH_BASE.replace(/\{yyyy}/g, year)
     .replace(/\{mm}/g, month)
     .replace("{q}", quarter.toString());
 }
@@ -139,19 +139,19 @@ function getInvoicesForFolder(folder: string) {
 
 const invoiceService = {
   getUnassignedInvoices(): Invoice[] {
-    return getInvoicesForFolder(process.env.DEFAULT_INVOICE_PATH!);
+    return getInvoicesForFolder(process.env.DEFAULT_INVOICE_PATH);
   },
   getInvoicesForMonth(month: string) {
     const basePath = resolveInvoiceBasePath(month);
 
-    const outgoing = path.join(basePath, process.env.INVOICE_OUTGOING_FOLDER!);
+    const outgoing = path.join(basePath, process.env.INVOICE_OUTGOING_FOLDER);
     const incoming = path.join(
       basePath,
-      process.env.INVOICE_INCOMING_BANK_FOLDER!,
+      process.env.INVOICE_INCOMING_BANK_FOLDER,
     );
     const incomingCash = path.join(
       basePath,
-      process.env.INVOICE_INCOMING_CASH_FOLDER!,
+      process.env.INVOICE_INCOMING_CASH_FOLDER,
     );
 
     return [
@@ -205,19 +205,19 @@ const invoiceService = {
 
     const newFolder = (() => {
       if (!inv.paymentDate) {
-        return process.env.DEFAULT_INVOICE_PATH!;
+        return process.env.DEFAULT_INVOICE_PATH;
       }
 
       const basePath = resolveInvoiceBasePath(inv.paymentDate);
 
       const folder = (() => {
         if (amountNumber && amountNumber > 0) {
-          return process.env.INVOICE_OUTGOING_FOLDER!;
+          return process.env.INVOICE_OUTGOING_FOLDER;
         }
 
         return inv.bankOrCash == "bank"
-          ? process.env.INVOICE_INCOMING_BANK_FOLDER!
-          : process.env.INVOICE_INCOMING_CASH_FOLDER!;
+          ? process.env.INVOICE_INCOMING_BANK_FOLDER
+          : process.env.INVOICE_INCOMING_CASH_FOLDER;
       })();
 
       return path.join(basePath, folder);
