@@ -243,7 +243,7 @@ const invoiceService = {
     }, 0);
   },
   openFolderForMonth(dateWithFullYear: string) {
-    childProcess.exec(`open ${resolveInvoiceBasePath(dateWithFullYear)}`);
+    childProcess.exec(`open "${resolveInvoiceBasePath(dateWithFullYear)}"`);
   },
 };
 
