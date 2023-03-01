@@ -1,3 +1,3 @@
 #! /bin/sh
 
-npm start
+npm start:full
