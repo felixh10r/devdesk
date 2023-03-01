@@ -16,6 +16,7 @@ declare global {
       MAIL_SENDER_NAME: string;
       MAIL_TO: string;
       PORT: string;
+      USER_AUTH: string;
     }
   }
 }

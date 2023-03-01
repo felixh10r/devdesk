@@ -5,6 +5,7 @@ import FilterBar from "~/components/FilterBar";
 import InvoiceRow from "~/components/InvoiceRow";
 import type { Invoice } from "~/lib/services/InvoiceService";
 import invoiceService from "../lib/services/InvoiceService";
+import {checkAuth} from "~/lib/helpers/auth";
 
 interface LoaderData {
   unassignedInvoices: Invoice[];
@@ -20,6 +21,8 @@ const IFRAME_NAME = "iframe-preview";
 const BOOKKEEPING_THRESHOLD_DATE = 7;
 
 export const loader: LoaderFunction = async ({ request }) => {
+  await checkAuth(request);
+
   const url = new URL(request.url);
   const month = url.searchParams.get("month");
   const action = url.searchParams.get("action");
@@ -62,6 +65,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
+  await checkAuth(request);
+
   const body = await request.formData();
 
   invoiceService.saveInvoice(body);
