@@ -12,6 +12,7 @@ body {
 }
 
 iframe {
+  display: none;
   width: 100%;
   border: 0;
   border-inline-start: 1px solid grey;
@@ -76,7 +77,17 @@ section + section {
 
 .two-panes {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 865px) {
+  iframe {
+    display: block;
+  }
+
+  .two-panes {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .two-panes > * {
