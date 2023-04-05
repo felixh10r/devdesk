@@ -1,3 +1,3 @@
 #! /bin/sh
 
-npm start:full
+npm run start:full
