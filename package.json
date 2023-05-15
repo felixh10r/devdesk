@@ -8,21 +8,21 @@
     "start:full": "remix build && env-cmd remix-serve build"
   },
   "dependencies": {
-    "@remix-run/node": "^1.7.2",
-    "@remix-run/react": "^1.7.2",
-    "@remix-run/serve": "^1.7.2",
+    "@remix-run/node": "^1.16.0",
+    "@remix-run/react": "^1.16.0",
+    "@remix-run/serve": "^1.16.0",
     "env-cmd": "^10.1.0",
-    "prettier": "^2.7.1",
+    "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.7.2",
-    "@remix-run/eslint-config": "^1.7.2",
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6",
-    "eslint": "^8.23.1",
-    "typescript": "^4.7.4"
+    "@remix-run/dev": "^1.16.0",
+    "@remix-run/eslint-config": "^1.16.0",
+    "@types/react": "^18.2.4",
+    "@types/react-dom": "^18.2.3",
+    "eslint": "^8.39.0",
+    "typescript": "^5.0.4"
   },
   "engines": {
     "node": ">=14"

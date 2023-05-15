@@ -39,8 +39,7 @@ function resolveInvoiceBasePath(dateWithFullYear: string) {
   const quarter = getQuarter(dateWithFullYear);
   const [year, month] = dateWithFullYear.split("-");
 
-  return process.env
-    .INVOICE_PATH_BASE.replace(/\{yyyy}/g, year)
+  return process.env.INVOICE_PATH_BASE.replace(/\{yyyy}/g, year)
     .replace(/\{mm}/g, month)
     .replace("{q}", quarter.toString());
 }

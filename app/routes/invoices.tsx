@@ -5,7 +5,7 @@ import FilterBar from "~/components/FilterBar";
 import InvoiceRow from "~/components/InvoiceRow";
 import type { Invoice } from "~/lib/services/InvoiceService";
 import invoiceService from "../lib/services/InvoiceService";
-import {checkAuth} from "~/lib/helpers/auth";
+import { checkAuth } from "~/lib/helpers/auth";
 
 interface LoaderData {
   unassignedInvoices: Invoice[];
