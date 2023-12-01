@@ -24,7 +24,7 @@ export function invoiceToString(inv: Invoice) {
 
   if (inv.paymentDate) {
     const [year, month, date] = inv.paymentDate.split("-");
-    text += `${date}.${month}.${year}`;
+    text += `${date}/${month}/${year}`;
   }
 
   const vatStr =
